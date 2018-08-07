@@ -5,9 +5,11 @@ import { Route, Switch } from 'react-router';
 import AppView from './AppView';
 import FirstPage from './FirstPage';
 
-const withAppView = component => customParams => () => {
+const withCustomParams = component => customParams => props => {
   return (
-    <React.Fragment>{React.cloneElement(component, customParams)}</React.Fragment>
+    <React.Fragment>
+      {React.cloneElement(component, { ...customParams, ...props })}
+    </React.Fragment>
   );
 };
 
@@ -16,8 +18,11 @@ class App extends Component {
     return (
       <AppView>
         <Switch>
-          <Route exact path="/" component={withAppView(<Homepage />)} />
-          <Route path="/first-page" component={withAppView(<FirstPage />)} />
+          <Route exact path="/" component={withCustomParams(<Homepage />)} />
+          <Route
+            path="/first-page"
+            component={withCustomParams(<FirstPage />)}
+          />
         </Switch>
       </AppView>
     );
