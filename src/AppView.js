@@ -10,14 +10,20 @@ class AppView extends Component {
   handleColorChange = () =>
     this.setState({ style: this.state.style === 'light' ? 'dark' : 'light' });
 
-  render() {
+  renderChild() {
     const { children } = this.props;
     const { style } = this.state;
-    const element = React.Children.map(children.props.children, child =>
+
+    return React.Children.map(children.props.children, child =>
       React.cloneElement(child, {
         component: child.props.component({ style })
       })
     );
+  }
+
+  render() {
+    const { style } = this.state;
+
     return (
       <div className="App">
         <header className="App-header">
@@ -29,16 +35,18 @@ class AppView extends Component {
               <Link to={`/first-page`}>First page</Link>
             </li>
           </ul>
-          <button className={'button'} onClick={this.handleColorChange}>{style}</button>
+          <button className={'button'} onClick={this.handleColorChange}>
+            {style}
+          </button>
         </header>
-        <div className={'App-content'}>{element}</div>
+        <div className={'App-content'}>{this.renderChild()}</div>
       </div>
     );
   }
 }
 
 AppView.propTypes = {
-    children: PropTypes.node.isRequired
+  children: PropTypes.node.isRequired
 };
 
 export default AppView;
